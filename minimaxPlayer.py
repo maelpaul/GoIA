@@ -21,7 +21,7 @@ class myPlayer(PlayerInterface):
     def __init__(self):
         self._board = Goban.Board()
         self._mycolor = None
-        self._timeout = 0.1
+        self._timeout = 0.1 # in seconds
 
     def getPlayerName(self):
         return "Minimax Player"
