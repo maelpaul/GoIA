@@ -23,11 +23,12 @@ def randomEndGame(board, color):
     moves = board.legal_moves() 
     move = choice(moves) 
     board.push(move)
-    randomEndGame(board, color)
+    result = randomEndGame(board, color)
     board.pop()
+    return result
 
 def MonteCarloHeuristic(board, color):
     heuristic = 0
-    for i in range(10):
+    for i in range(1):
         heuristic += randomEndGame(board, color)
     return heuristic

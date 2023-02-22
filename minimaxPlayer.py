@@ -9,8 +9,9 @@ import time
 import Goban 
 from random import choice
 from playerInterface import *
+import heuristic
 
-class MinimaxPlayer(PlayerInterface):
+class myPlayer(PlayerInterface):
     ''' Example of a random player for the go. The only tricky part is to be able to handle
     the internal representation of moves given by legal_moves() and used by push() and 
     to translate them to the GO-move strings "A1", ..., "J8", "PASS". Easy!
@@ -20,7 +21,7 @@ class MinimaxPlayer(PlayerInterface):
     def __init__(self):
         self._board = Goban.Board()
         self._mycolor = None
-        self._timeout = 10
+        self._timeout = 0.1
 
     def getPlayerName(self):
         return "Minimax Player"
@@ -28,17 +29,14 @@ class MinimaxPlayer(PlayerInterface):
     # friend level
     def max_min(self, depth):
         if (self._board.is_game_over() or depth == 0):
-            if (self._board.player_name(self) == "black"): # 'black'
-                return [heuristique(self._board), None]
-            else: # 'white'
-                return [-heuristique(self._board), None]
+            return [heuristic.MonteCarloHeuristic(self._board, self._mycolor), None]
         best = -float('inf')
         moves = self._board.legal_moves()
         best_moves = [] 
         for move in moves:
             mv = move
             self._board.push(move)
-            res = self.min_max(self._board, depth-1)
+            res = self.min_max(depth-1)
             if (res > best):
                 best_moves = []
                 best_moves.append(mv)
@@ -51,15 +49,12 @@ class MinimaxPlayer(PlayerInterface):
     # foe level
     def min_max(self, depth):
         if (self._board.is_game_over() or depth == 0):
-            if (self._board.player_name(self) == "black"): # 'black'
-                return heuristique(self._board)
-            else: # 'white'
-                return -heuristique(self._board)
+            return heuristic.MonteCarloHeuristic(self._board, self._mycolor)
         worst = float('inf')
         moves = self._board.legal_moves()
         for move in moves:
             self._board.push(move)
-            res = self.max_min(self._board, depth-1)
+            res = self.max_min(depth-1)
             worst = min(worst, res[0])
             self._board.pop()
         return worst    
