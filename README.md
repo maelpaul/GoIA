@@ -1,5 +1,6 @@
-# Projet IA Go
+# Project AI Go
 
-## Auteurs
+## Authors
 
 LADAGNOUS Louis-Victor et PAUL Maël
+
