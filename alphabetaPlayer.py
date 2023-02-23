@@ -24,43 +24,44 @@ class myPlayer(PlayerInterface):
         self._timeout = 0.1 # in seconds
 
     def getPlayerName(self):
-        return "Minimax Player"
+        return "Alphabeta Player"
 
     # friend level
-    def max_min(self, depth):
+    def max_value(self, alpha, beta, depth):
         if (self._board.is_game_over() or depth == 0):
             return heuristic.MonteCarloHeuristic(self._board, self._mycolor)
-        best = -float('inf')
         moves = self._board.legal_moves()
-        best_moves = [] 
         for move in moves:
             self._board.push(move)
-            res = self.min_max(depth-1)
-            best = max(best, res)
+            alpha = max(alpha, self.min_value(alpha, beta, depth-1))
             self._board.pop()
-        return best
+            if (alpha >= beta):
+                return beta
+        return alpha
 
     # foe level
-    def min_max(self, depth):
+    def min_value(self, alpha, beta, depth):
         if (self._board.is_game_over() or depth == 0):
             return heuristic.MonteCarloHeuristic(self._board, self._mycolor)
-        worst = float('inf')
         moves = self._board.legal_moves()
         for move in moves:
             self._board.push(move)
-            res = self.max_min(depth-1)
-            worst = min(worst, res)
+            beta = min(beta, self.max_value(alpha, beta, depth-1))
             self._board.pop()
-        return worst  
+            if alpha >= beta:
+                return alpha
+        return beta
 
-    def minimax(self, depth):
+    def alphabeta(self, depth):
+        alpha = -float('inf')
+        beta = float('inf')
         best = -float('inf')
         best_moves = []
         moves = self._board.legal_moves()
         for move in moves:
             mv = move
             self._board.push(move)
-            res = self.min_max(depth-1)
+            res = self.min_value(alpha, beta, depth-1)
             if (res > best):
                 best_moves = []
                 best_moves.append(mv)
@@ -68,7 +69,7 @@ class myPlayer(PlayerInterface):
                 best_moves.append(mv)
             best = max(best, res)
             self._board.pop()
-        return [best, best_moves]
+        return [best, best_moves] 
 
     def iterativeDeepening(self):
         start = time.time()
@@ -76,7 +77,7 @@ class myPlayer(PlayerInterface):
         best_move = None
         depth = 1
         while(end - start < self._timeout):
-            result = self.minimax(depth)
+            result = self.alphabeta(depth)
             best_move = choice(result[1])
             depth += 1
             end = time.time()
