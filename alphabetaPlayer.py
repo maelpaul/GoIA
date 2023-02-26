@@ -49,7 +49,7 @@ class myPlayer(PlayerInterface):
     # friend level
     def max_value(self, alpha, beta, depth):
         if (self._board.is_game_over() or depth == 0):
-            return heuristic.MonteCarloHeuristic(self._board, self._mycolor)
+            return heuristic.libertiesAndCountHeuristic(self._board, self._mycolor)
         moves = self._board.legal_moves()
         for move in moves:
             self._board.push(move)
@@ -62,7 +62,7 @@ class myPlayer(PlayerInterface):
     # foe level
     def min_value(self, alpha, beta, depth):
         if (self._board.is_game_over() or depth == 0):
-            return heuristic.MonteCarloHeuristic(self._board, self._mycolor)
+            return heuristic.libertiesAndCountHeuristic(self._board, self._mycolor)
         moves = self._board.legal_moves()
         for move in moves:
             self._board.push(move)
