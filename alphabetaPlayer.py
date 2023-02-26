@@ -40,10 +40,11 @@ class myPlayer(PlayerInterface):
         return first_move
     
     def get_next_move(self):
-        next_move = games.get_next_move(self._foe_move, self._board.legal_moves(), self._turn)
-        if next_move != None:
-            next_move = self._board.name_to_flat(next_move)
-            return next_move
+        if self._turn < 90:
+            next_move = games.get_next_move(self._foe_move, self._board.legal_moves(), self._turn)
+            if next_move != None:
+                next_move = self._board.name_to_flat(next_move)
+                return next_move
         return self.iterativeDeepening()
 
     # friend level

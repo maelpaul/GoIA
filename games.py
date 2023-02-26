@@ -7,12 +7,14 @@ with open("games.json") as games:
 
 B_list = []
 W_list = []
+list = []
 
 for dico in data:
     if dico['winner'] == 'B':
         B_list.append(dico['moves'])
     elif dico['winner'] == 'W':
         W_list.append(dico['moves'])
+    list.append(dico['moves'])
 
 def black_first_move():
     first_moves = [L[0] for L in B_list]
