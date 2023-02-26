@@ -10,6 +10,7 @@ import Goban
 from random import choice
 from playerInterface import *
 import heuristic
+import games
 
 class myPlayer(PlayerInterface):
     ''' Example of a random player for the go. The only tricky part is to be able to handle
@@ -22,9 +23,28 @@ class myPlayer(PlayerInterface):
         self._board = Goban.Board()
         self._mycolor = None
         self._timeout = 0.1 # in seconds
+        self._first = 0
+        self._foe_move = None
+        self._turn = 0
 
     def getPlayerName(self):
         return "Alphabeta Player"
+
+    def test_color(self):
+        if self._mycolor == self._board._BLACK:
+            self._first = 1
+
+    def first_move(self):
+        first_move = self._board.name_to_flat(games.black_first_move())
+        self._first = 0
+        return first_move
+    
+    def get_next_move(self):
+        next_move = games.get_next_move(self._foe_move, self._board.legal_moves(), self._turn)
+        if next_move != None:
+            next_move = self._board.name_to_flat(next_move)
+            return next_move
+        return self.iterativeDeepening()
 
     # friend level
     def max_value(self, alpha, beta, depth):
@@ -87,7 +107,11 @@ class myPlayer(PlayerInterface):
         if self._board.is_game_over():
             print("Referee told me to play but the game is over!")
             return "PASS" 
-        move = self.iterativeDeepening()
+        if self._first == 0:
+            move = self.get_next_move()
+        elif self._first == 1:
+            move = self.first_move()
+        self._turn += 1
         self._board.push(move)
 
         # New here: allows to consider internal representations of moves
@@ -100,10 +124,13 @@ class myPlayer(PlayerInterface):
     def playOpponentMove(self, move):
         print("Opponent played ", move) # New here
         # the board needs an internal represetation to push the move.  Not a string
+        self._foe_move = move
+        self._turn += 1
         self._board.push(Goban.Board.name_to_flat(move)) 
 
     def newGame(self, color):
         self._mycolor = color
+        self.test_color()
         self._opponent = Goban.Board.flip(color)
 
     def endGame(self, winner):
@@ -111,6 +138,3 @@ class myPlayer(PlayerInterface):
             print("I won!!!")
         else:
             print("I lost :(!!")
-
-
-
