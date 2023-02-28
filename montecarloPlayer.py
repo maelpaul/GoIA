@@ -50,7 +50,7 @@ class myPlayer(PlayerInterface):
 
     def random_choice(self, depth):
         if (self._board.is_game_over() or depth == 0):
-            return heuristic.libertiesAndCountHeuristic(self._board, self._mycolor) 
+            return heuristic.secondHeuristic(self._board, self._mycolor) 
         moves = self._board.legal_moves()
         move = choice(moves)
         self._board.push(move)

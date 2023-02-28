@@ -30,20 +30,6 @@ class myPlayer(PlayerInterface):
     def getPlayerName(self):
         return "Minimax Player"
 
-    # friend level
-    def max_min(self, depth):
-        if (self._board.is_game_over() or depth == 0):
-            return heuristic.libertiesAndCountHeuristic(self._board, self._mycolor)
-        best = -float('inf')
-        moves = self._board.legal_moves()
-        best_moves = [] 
-        for move in moves:
-            self._board.push(move)
-            res = self.min_max(depth-1)
-            best = max(best, res)
-            self._board.pop()
-        return best
-
     def test_color(self):
         if self._mycolor == self._board._BLACK:
             self._first = 1
@@ -61,10 +47,24 @@ class myPlayer(PlayerInterface):
                 return next_move
         return self.iterativeDeepening()
 
+    # friend level
+    def max_min(self, depth):
+        if (self._board.is_game_over() or depth == 0):
+            return heuristic.secondHeuristic(self._board, self._mycolor)
+        best = -float('inf')
+        moves = self._board.legal_moves()
+        best_moves = [] 
+        for move in moves:
+            self._board.push(move)
+            res = self.min_max(depth-1)
+            best = max(best, res)
+            self._board.pop()
+        return best
+
     # foe level
     def min_max(self, depth):
         if (self._board.is_game_over() or depth == 0):
-            return heuristic.libertiesAndCountHeuristic(self._board, self._mycolor)
+            return heuristic.secondHeuristic(self._board, self._mycolor)
         worst = float('inf')
         moves = self._board.legal_moves()
         for move in moves:
