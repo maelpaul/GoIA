@@ -85,4 +85,4 @@ def secondHeuristic(board, color):
     return result + libertiesAndCountHeuristic(board, color)
 
 def get_color(color):
-    return Goban.Board._BLACK if color == Goban.Board._WHITE else Goban.Board._WHITE
+    return Goban.Board._BLACK if color == Goban.Board._BLACK else Goban.Board._WHITE

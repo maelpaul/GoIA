@@ -26,7 +26,7 @@ class myPlayer(PlayerInterface):
         self._first = 0
         self._foe_move = None
         self._turn = 0
-        self._number_of_tries = 100 # number of tries in montecarlo
+        self._number_of_tries = 10 # number of tries in montecarlo
 
     def getPlayerName(self):
         return "Montecarlo Player"
