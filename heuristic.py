@@ -2,6 +2,7 @@ import time
 import Goban 
 from random import choice
 import math
+import copy
 
 
 def randomEndGame(board, color):
@@ -68,3 +69,20 @@ def libertiesAndCountHeuristic(board, color):
         return black_score - white_score
     else:
         return white_score - black_score
+
+
+def secondHeuristic(board, color):
+    moves = board.legal_moves()
+    result = 0
+    if board.is_game_over():
+        return libertiesAndCountHeuristic(board, color)
+    
+    for move in moves:
+        board.push(move)
+        result += libertiesAndCountHeuristic(board,color)
+        board.pop()
+    
+    return result + libertiesAndCountHeuristic(board, color)
+
+def get_color(color):
+    return Goban.Board._BLACK if color == Goban.Board._WHITE else Goban.Board._WHITE
