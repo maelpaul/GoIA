@@ -86,3 +86,4 @@ def secondHeuristic(board, color):
 
 def get_color(color):
     return Goban.Board._BLACK if color == Goban.Board._WHITE else Goban.Board._WHITE
+
