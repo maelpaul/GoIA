@@ -3,6 +3,8 @@ import Goban
 from random import choice
 import math
 import copy
+import numpy as np
+from collections import defaultdict
 
 
 def randomEndGame(board, color):
