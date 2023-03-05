@@ -26,9 +26,10 @@ class myPlayer(PlayerInterface):
         self._first = 0
         self._foe_move = None
         self._turn = 0
+        self._number_of_tries = 10 # number of tries in montecarlo
 
     def getPlayerName(self):
-        return "Minimax Player"
+        return "Montecarlo Player"
 
     def test_color(self):
         if self._mycolor == self._board._BLACK:
@@ -47,41 +48,26 @@ class myPlayer(PlayerInterface):
                 return next_move
         return self.iterativeDeepening()
 
-    # friend level
-    def max_min(self, depth):
+    def random_choice(self, depth):
         if (self._board.is_game_over() or depth == 0):
-            return heuristic.secondHeuristic(self._board, self._mycolor)
-        best = -float('inf')
+            return heuristic.secondHeuristic(self._board, self._mycolor) 
         moves = self._board.legal_moves()
-        best_moves = [] 
-        for move in moves:
-            self._board.push(move)
-            res = self.min_max(depth-1)
-            best = max(best, res)
-            self._board.pop()
-        return best
+        move = choice(moves)
+        self._board.push(move)
+        res = self.random_choice(depth-1)
+        self._board.pop()
+        return res
 
-    # foe level
-    def min_max(self, depth):
-        if (self._board.is_game_over() or depth == 0):
-            return heuristic.secondHeuristic(self._board, self._mycolor)
-        worst = float('inf')
-        moves = self._board.legal_moves()
-        for move in moves:
-            self._board.push(move)
-            res = self.max_min(depth-1)
-            worst = min(worst, res)
-            self._board.pop()
-        return worst  
-
-    def minimax(self, depth):
+    def montecarlo(self, depth):
         best = -float('inf')
         best_moves = []
         moves = self._board.legal_moves()
         for move in moves:
             mv = move
+            res = 0
             self._board.push(move)
-            res = self.min_max(depth-1)
+            for i in range(self._number_of_tries):
+                res += self.random_choice(depth-1)
             if (res > best):
                 best_moves = []
                 best_moves.append(mv)
@@ -89,7 +75,7 @@ class myPlayer(PlayerInterface):
                 best_moves.append(mv)
             best = max(best, res)
             self._board.pop()
-        return [best, best_moves]
+        return [best, best_moves]         
 
     def iterativeDeepening(self):
         start = time.time()
@@ -97,7 +83,7 @@ class myPlayer(PlayerInterface):
         best_move = None
         depth = 1
         while(end - start < self._timeout):
-            result = self.minimax(depth)
+            result = self.montecarlo(depth)
             best_move = choice(result[1])
             depth += 1
             end = time.time()
