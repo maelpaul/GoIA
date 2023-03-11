@@ -22,7 +22,7 @@ class myPlayer(PlayerInterface):
     def __init__(self):
         self._board = Goban.Board()
         self._mycolor = None
-        self._timeout = 0.1 # in seconds
+        self._timeout = 10 # in seconds
         self._first = 0
         self._foe_move = None
         self._turn = 0
