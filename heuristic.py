@@ -40,6 +40,9 @@ def libertiesAndCountHeuristic(board, color):
     black_stones = 0
     white_stones = 0
 
+    black_influence = 0
+    white_influence = 0
+
     for i in range(9):
         for j in range(9):
             
@@ -62,10 +65,26 @@ def libertiesAndCountHeuristic(board, color):
                     white_liberties += stone_liberties
                     white_stones += 1
 
+                black_influence_weight = 0
+                white_influence_weight = 0
+                for di, dj in [(1,0),(-1,0),(0,1),(0,-1)]:
+                    ni, nj = i+di, j+dj
+                    if 0 <= ni <= 8 and 0 <= nj <= 8:
+                        stone_color = board[board.flatten((ni,nj))]
+                        if stone_color == Goban.Board._BLACK:
+                            black_influence_weight += 1
+                        elif stone_color == Goban.Board._WHITE:
+                            white_influence_weight += 1
+                if black_influence_weight > white_influence_weight:
+                    black_influence += 1
+                elif white_influence_weight > black_influence_weight:
+                    white_influence += 1
+
+
 
                 
-    white_score += white_liberties + white_stones
-    black_score += black_liberties + black_stones
+    white_score += white_liberties + white_stones + white_influence
+    black_score += black_liberties + black_stones + black_influence
             
     if color == Goban.Board._BLACK:
         return black_score - white_score
