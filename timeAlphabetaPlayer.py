@@ -118,6 +118,52 @@ class myPlayer(PlayerInterface):
                return best_move 
         return best_move
 
+    # friend level
+    def quick_max_value(self, alpha, beta, depth):
+        if (self._board.is_game_over() or depth == 0):
+            return heuristic.quick_heuristic(self._board, self._mycolor)
+        moves = self._board.legal_moves()
+        for move in moves:
+            self._board.push(move)
+            alpha = max(alpha, self.quick_min_value(alpha, beta, depth-1))
+            self._board.pop()
+            if (alpha >= beta):
+                return beta
+        return alpha
+
+    # foe level
+    def quick_min_value(self, alpha, beta, depth):
+        if (self._board.is_game_over() or depth == 0):
+            return heuristic.quick_heuristic(self._board, self._mycolor)
+        moves = self._board.legal_moves()
+        for move in moves:
+            self._board.push(move)
+            beta = min(beta, self.quick_max_value(alpha, beta, depth-1))
+            self._board.pop()
+            if alpha >= beta:
+                return alpha
+        return beta
+
+    def quick_alphabeta(self, depth):
+        alpha = -float('inf')
+        beta = float('inf')
+        best = -float('inf')
+        best_moves = []
+        moves = self._board.legal_moves()
+        for move in moves:
+            mv = move
+            self._board.push(move)
+            res = self.quick_min_value(alpha, beta, depth-1)
+            if (res > best):
+                best_moves = []
+                best_moves.append(mv)
+            elif (res == best):
+                best_moves.append(mv)
+            best = max(best, res)
+            self._board.pop()
+        best_move = choice(best_moves)
+        return best_move
+
     def getPlayerMove(self):
         start = time.time()
         if self._board.is_game_over():
@@ -129,8 +175,10 @@ class myPlayer(PlayerInterface):
                 move = self.get_next_move()
             elif self._first == 1:
                 move = self.first_move()
+            if move == None:
+                move = self.quick_alphabeta(2)
         else:
-            move = -1
+            move = self.quick_alphabeta(2)
 
         self._turn += 1
         self._board.push(move)

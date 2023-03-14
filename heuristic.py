@@ -86,5 +86,9 @@ def secondHeuristic(board, color):
     
     return result + libertiesAndCountHeuristic(board, color)
 
-def get_color(color):
-    return Goban.Board._BLACK if color == Goban.Board._BLACK else Goban.Board._WHITE
+def quick_heuristic(board, color):
+    (black, white) = board.compute_score()
+    if color == Goban.Board._BLACK:
+        return black - white
+    else:
+        return white - black    
