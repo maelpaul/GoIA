@@ -22,14 +22,14 @@ class myPlayer(PlayerInterface):
     def __init__(self):
         self._board = Goban.Board()
         self._mycolor = None
-        self._timeout = 5 # in seconds
+        self._timeout = 20 # in seconds
         self._play_time = 0
         self._first = 0
         self._foe_move = None
         self._turn = 0
 
     def getPlayerName(self):
-        return "Alphabeta Player"
+        return "GiGoChad"
 
     def test_color(self):
         if self._mycolor == self._board._BLACK:
