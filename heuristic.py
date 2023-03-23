@@ -65,6 +65,8 @@ def libertiesAndCountHeuristic(board, color):
                     white_liberties += stone_liberties
                     white_stones += 1
 
+
+                #Calculer l'influence des pions autour du pion qu'on est en train d'observer.
                 black_influence_weight = 0
                 white_influence_weight = 0
                 for di, dj in [(1,0),(-1,0),(0,1),(0,-1)]:
