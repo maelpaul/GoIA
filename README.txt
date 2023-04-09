@@ -1,3 +1,47 @@
+Projet IA Go
+
+
+Auteurs:
+
+PAUL Maël
+LADAGNOUS Louis-Victor
+
+
+Fonctionnement de notre joueur (GiGoChad): 
+
+En début de partie, notre joueur joue des coups calculés à l'aide du programme games.py. Ce programme utilise les 
+parties professionnelles du fichier games.json et les sépare en deux, d'un côté celles donnant la victoire aux NOIRS
+et de l'autre celles donnant la victoire aux BLANCS. Ainsi, si notre joueur joue les NOIRS, il utilisera les parties 
+donnant la victoire aux NOIRS pour trouver le meilleur coup possible, cela fonctionne de la même manière s'il joue les
+BLANCS. En ce qui concerne le tout premier coup de la partie, le meilleur coup possible est celui qui donne la plus grande
+chance que les NOIRS gagnent à la fin. Pour les autres coups, on regarde si le coup de l'adversaire a déjà été joué, si non,
+il n'y a pas de données et on va devoir jouer un coup calculé à l'aide de l'iterative deepening, si oui, on regarde quel coup
+suivant nous donne la meilleure chance de gagner et on le joue, dans le cas où aucun coup ne nous fait gagner, on joue un coup
+calculé à l'aide de l'iterative deepening.
+En milieu de partie, lorsque plus aucun coup ne peut être joué en utilisant la banque de données games.json, tous les coups
+joués sont calculés avec un iterative deepening, tant que le temps restant à jouer pour le coup courant est supérieur au temps 
+de calcul à la profondeur précédente (le temps restant est calculé à l'aide du timeout, qui correspond au temps de calcul maximal 
+que l'on autorise pour un coup), on relance un alphabeta de profondeur égale à la précédente plus 1. Le temps de jeu est aussi 
+vérifié lors du passage dans l'alphabeta, ce qui permet de ne pas dépasser le temps maximal autorisé pour un coup. La profondeur 
+ne permet pas d'atteindre la fin de partie, nous utilisons donc une heuristique pour évaluer le plateau de Go et ainsi trouver 
+lequel est le plus avantageux pour nous.
+En fin de partie, s'il reste peu de temps de jeu (environ moins d'une minute), le coup à jouer est calculé à l'aide d'un alphabeta 
+rapide de profondeur 3 qui utilise une heuristique elle aussi calculée rapidement, cela nous permet de jouer un coup optimal de 
+manière très rapide et ainsi d'éviter de faire un Timeout qui nous fait perdre la partie.
+
+En ce qui concerne le calcul du meilleur coup en début de partie, la création de la bibliothèque d'ouverture en séparant les
+parties donnant la victoire aux NOIRS et celles aux BLANCS nous a paru évident. Nous avons ensuite choisi d'utiliser un iterative
+deepening, un alphabeta et une heuristique car nous avions pu voir avec les échecs que c'était la manière la plus efficace de 
+calculer le meilleur coup à jouer. Nous avons tout de même comparé avec un MonteCarlo qui s'est révélé moins efficace. Pour la
+fin de partie, après avoir remarqué que nous dépassions parfois le temps maximal de 30 minutes de calcul pour un joueur, nous
+avons décidé de résoudre le problème en implémentant un alphabeta (de profondeur 3) et une heuristique rapide.
+
+Nous avons vérifié la validité de notre player en jouant contre le random player, le gnugo player, notre player, ainsi que des
+players d'autres équipes.
+
+
+Indications:
+
 Goban.py 
 ---------
 
@@ -87,5 +131,3 @@ python3 namedGame.py myPlayer randomPlayer
 
 python3 namedGame.py gnugoPlayer myPlayer
  --> gnugo (level 0) contre votre joueur (très dur à battre)
-
-

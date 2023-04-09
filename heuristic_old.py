@@ -1,4 +1,34 @@
-import Goban
+import time
+import Goban 
+from random import choice
+import math
+import copy
+import numpy as np
+from collections import defaultdict
+
+
+def randomEndGame(board, color):
+    if board.is_game_over():
+        (black, white) = board.compute_score()
+        if color == Goban.Board._BLACK:
+            return black - white
+        else:
+            return white - black
+    
+    moves = board.legal_moves() 
+    move = choice(moves) 
+    board.push(move)
+    result = randomEndGame(board, color)
+    board.pop()
+    return result
+
+
+def MonteCarloHeuristic(board, color):
+    heuristic = 0
+    for i in range(1):
+        heuristic += randomEndGame(board, color)
+    return heuristic
+
 
 def libertiesAndCountHeuristic(board, color):
     black_score = 0
@@ -35,6 +65,8 @@ def libertiesAndCountHeuristic(board, color):
                     white_liberties += stone_liberties
                     white_stones += 1
 
+
+                #Calculer l'influence des pions autour du pion qu'on est en train d'observer.
                 black_influence_weight = 0
                 white_influence_weight = 0
                 for di, dj in [(1,0),(-1,0),(0,1),(0,-1)]:
@@ -60,6 +92,7 @@ def libertiesAndCountHeuristic(board, color):
         return black_score - white_score
     else:
         return white_score - black_score
+
 
 def secondHeuristic(board, color):
     moves = board.legal_moves()
