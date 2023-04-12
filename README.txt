@@ -29,6 +29,19 @@ En fin de partie, s'il reste peu de temps de jeu (environ moins d'une minute), l
 rapide de profondeur 3 qui utilise une heuristique elle aussi calculée rapidement, cela nous permet de jouer un coup optimal de 
 manière très rapide et ainsi d'éviter de faire un Timeout qui nous fait perdre la partie.
 
+En ce qui concerne l'heuristique employée lors de la phase de milieu de partie, une évaluation du tableau courant est effectuée. L'heuristique se
+base sur trois critères : 
+    - le nombre de pierres blanches/noires
+    - le nombre de libertés accessibles par chaque pion sur le plateau (en fonction de sa couleur)
+    - le "poids" des pierres autour de chaque pion du plateau, qui nous donne un "poids total" et donc l'influence de chaque couleur sur le plateau.
+
+L'heuristique consiste donc à calculer, pour chaque coup possible depuis la position courante, le "poids" d'une plateau en fonction des critères mentionnés
+précédemment.
+
+En fin de partie, on fait usage d'une autre heuristique, beaucoup moins performante mais beaucoup plus rapide. Cette heuristique utilise simplement la fonction
+compute_score() afin d'évaluer le plateau actuel. Elle permet ainsi de jouer des coups en fin de partie de manière très rapide tout en essayant de 
+jouer des coups qui ne sont pas aléatoires.
+
 En ce qui concerne le calcul du meilleur coup en début de partie, la création de la bibliothèque d'ouverture en séparant les
 parties donnant la victoire aux NOIRS et celles aux BLANCS nous a paru évident. Nous avons ensuite choisi d'utiliser un iterative
 deepening, un alphabeta et une heuristique car nous avions pu voir avec les échecs que c'était la manière la plus efficace de 
