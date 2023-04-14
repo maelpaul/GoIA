@@ -7,6 +7,10 @@ PAUL Maël
 LADAGNOUS Louis-Victor
 
 
+Packages nécessaires:
+json, random, time, io, sys, importlib, numpy, __future__
+
+
 Fonctionnement de notre joueur (GiGoChad): 
 
 En début de partie, notre joueur joue des coups calculés à l'aide du programme games.py. Ce programme utilise les 
