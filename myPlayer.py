@@ -19,7 +19,8 @@ class myPlayer(PlayerInterface):
     def __init__(self):
         self._board = Goban.Board()
         self._mycolor = None
-        self._timeout = 50 # in seconds
+        self._allowed_time = 300 # in seconds
+        self._timeout = 10 # in seconds
         self._play_time = 0
         self._first = 0
         self._foe_move = None
@@ -170,7 +171,7 @@ class myPlayer(PlayerInterface):
         moves = self._board.legal_moves()
         if len(moves) == 1:
             move = moves[0]
-        elif self._play_time < 1800 - 1.5 * self._timeout:
+        elif self._play_time < self._allowed_time - 1.5 * self._timeout:
             if self._first == 0:
                 move = self.get_next_move()
             elif self._first == 1:
